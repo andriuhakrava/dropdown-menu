@@ -54,9 +54,17 @@
 
 		inputEl.addEventListener('input', filterResults);
 		window.addEventListener('load', () => inputEl.focus());
+		window.addEventListener('resize', () => {
+			let ul = document.querySelector('#searchResultDropDown');
+			if (!ul) return;
+			else drawMenu(ul);
+		});
 		
-		function setDropDownPosition(){
-			return inputEl.getBoundingClientRect();
+		function setDropDownPosition(inputEl, ul){
+			let coords = inputEl.getBoundingClientRect();
+			ul.style.top = coords.bottom + 'px';
+			ul.style.left = coords.left + 'px';
+			ul.style.width = coords.width + 'px';
 		}
 
 		function filterResults(e) {
@@ -87,13 +95,10 @@
 			}
 		}
 
-		function drawMenu(el){
-			let inputPosition = setDropDownPosition();
-			document.body.appendChild(el);
-			el.style.position = 'absolute';
-			el.style.top = inputPosition.bottom + 'px';
-			el.style.left = inputPosition.left + 'px';
-			el.style.width = inputPosition.width + 'px';
+		function drawMenu(ul){
+			document.body.appendChild(ul);
+			ul.style.position = 'absolute';
+			setDropDownPosition(inputEl, ul);
 		}
 
 	</script>
