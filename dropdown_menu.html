@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dropdown Menu</title>
+	<style>
+		body {
+			display: flex;
+			height: 100vh;
+			justify-content: center;
+		}
+
+		input {
+			position: relative;
+			padding: 8px 16px;
+			border: 1px solid green;
+			outline: none;
+		}
+
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+		}
+
+		li {
+			box-sizing: border-box;
+			padding: 8px 14px;
+			cursor: pointer;
+		}
+
+		li:hover {
+			background: #ddd;
+		}
+
+		#searchResultDropDown {
+			border: 1px solid green;
+			background: #eee;
+		}
+
+		#searchResultDropDown span {
+			font-weight: bold;
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<input type="text" />
+	</div>
+	<script>
+		let arr = ['nonedff', 'jhjonedgf', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+		let inputEl = document.querySelector('input');
+
+		inputEl.addEventListener('input', filterResults);
+		window.addEventListener('load', () => inputEl.focus());
+		
+		function setDropDownPosition(){
+			return inputEl.getBoundingClientRect();
+		}
+
+		function filterResults(e) {
+			let ul = document.querySelector('#searchResultDropDown');
+			let value = inputEl.value;
+			if (ul) ul.remove();
+			if (!value.length) return;
+
+			let filteredArr = arr.filter(elem => elem.indexOf(value) >= 0);
+
+			if (filteredArr.length && filteredArr.length < 50) {
+				ul = document.createElement('ul');
+				ul.setAttribute('id', 'searchResultDropDown');
+
+				filteredArr.forEach(item => {
+					let li = document.createElement('li');
+					let io = item.indexOf(inputEl.value);
+					let inputLength = inputEl.value.length;
+
+					li.innerHTML = 
+						item.substr(0, io) +
+						'<span>' + item.substr(io, inputLength) + '</span>' +
+						item.substr(io + inputLength);
+
+					ul.appendChild(li);
+				});
+				drawMenu(ul);
+			}
+		}
+
+		function drawMenu(el){
+			let inputPosition = setDropDownPosition();
+			document.body.appendChild(el);
+			el.style.position = 'absolute';
+			el.style.top = inputPosition.bottom + 'px';
+			el.style.left = inputPosition.left + 'px';
+			el.style.width = inputPosition.width + 'px';
+		}
+
+	</script>
+</body>
+</html>
